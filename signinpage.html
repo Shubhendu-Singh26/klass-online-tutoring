@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLASS - Sign In</title>
+    <link rel="icon" href="icon.jpg">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        h3 {
+            margin-top: 0; /* Remove default margin for heading */
+        }
+
+        /* Add the following style to address the issue */
+        select {
+            font-size: 14px; /* Ensure font size is set for select elements */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign In</h2>
+        <label for="role">I am a:</label>
+        <select id="role" name="role" onchange="toggleForm()" required>
+            <option value="" disabled selected>Select</option>
+            <option value="student">Student</option>
+            <option value="tutor">Tutor</option>
+        </select>
+
+        <!-- Student Sign In Form -->
+        <form id="studentForm" class="hidden">
+            <h3>Student Sign In</h3>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="validateSignIn('student')" >Sign In</button>
+        </form>
+
+        <!-- Tutor Sign In Form -->
+        <form id="tutorForm" class="hidden">
+            <h3>Tutor Sign In</h3>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="validateSignIn('tutor')">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+         function toggleForm() {
+        var role = document.getElementById('role').value;
+        var studentForm = document.getElementById('studentForm');
+        var tutorForm = document.getElementById('tutorForm');
+
+        if (role === 'student') {
+            studentForm.classList.remove('hidden');
+            tutorForm.classList.add('hidden');
+        } else if (role === 'tutor') {
+            studentForm.classList.add('hidden');
+            tutorForm.classList.remove('hidden');
+        }
+    }
+
+    function validateSignIn(role) {
+        var form;
+        if (role === 'student') {
+            form = document.getElementById('studentForm');
+        } else if (role === 'tutor') {
+            form = document.getElementById('tutorForm');
+        }
+
+        var email = form.querySelector('#email').value;
+        var password = form.querySelector('#password').value;
+
+        // Additional validation based on the role
+        if (email && password) {
+            // Assuming a successful sign-in would redirect to the home page
+            window.location.href = "\student-home.html"; // Replace 'home.html' with the actual home page URL
+        } else {
+            alert('Please fill in all the required fields.');
+        }
+    }
+    </script>
+</body>
+</html>

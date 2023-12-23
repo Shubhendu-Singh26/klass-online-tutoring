@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLASS - Sign Up</title>
+    <link rel="icon" href="icon.jpg">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .home{
+            text-decoration: none;
+            list-style: none;
+            color: black;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        h3 {
+            margin-top: 0; /* Remove default margin for heading */
+        }
+
+        /* Add the following style to address the issue */
+        select {
+            font-size: 14px; /* Ensure font size is set for select elements */
+        }
+
+        .hidden {
+    visibility: hidden;
+    position: absolute;
+    top: 100%; /* Position below the main options */
+    left: 0;
+    width: 100%;
+    z-index: 1; /* Ensure the hidden forms are above other elements */
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="formHeading">Sign Up</h2>
+        <label for="role">I am a:</label>
+        <select id="role" name="role" onchange="toggleForm()" required>
+            <option value="" disabled selected>Select</option>
+            <option value="student">Student</option>
+            <option value="tutor">Tutor</option>
+        </select>
+
+        <!-- Student Form -->
+        <form id="studentForm" class="hidden" method="post" action="signup.php">
+
+            <h3>Student SignUp Form</h3>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="class">Class:</label>
+            <input type="text" id="class" name="class" required>
+
+            <label for="mobile">Mobile:</label>
+            <input type="tel" id="mobile" name="mobile" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="validateSignUp('student')"><a href="student-home.html" class="home">Sign Up</a></button>
+        </form>
+
+        <!-- Tutor Form -->
+        <form id="tutorForm" class="hidden" method="post" action="signup.php">
+
+            <h3>Tutor SignUp Form</h3>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="qualification">Qualification:</label>
+            <select id="qualification" name="qualification" required>
+                <option value="" disabled selected>Select</option>
+                <option value="MSc">MSc</option>
+                <option value="MTech">MTech</option>
+                <option value="Popular Courses">Popular Courses</option>
+            </select>
+
+            <label for="mobile">Mobile:</label>
+            <input type="tel" id="mobile" name="mobile" required>
+
+            <label for="courses">Courses Taught:</label>
+            <select id="courses" name="courses" required>
+                <option value="" disabled selected>Select</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Mathematics">Mathematics</option>
+            </select>
+
+            <button type="button" onclick="validateSignUp('tutor')"><a href="group.html" class="home">Sign Up</a></button>
+        </form>
+    </div>
+
+    <script>
+        function toggleForm() {
+            var role = document.getElementById('role').value;
+            var studentForm = document.getElementById('studentForm');
+            var tutorForm = document.getElementById('tutorForm');
+            var formHeading = document.getElementById('formHeading');
+
+            if (role === 'student') {
+                studentForm.classList.remove('hidden');
+                tutorForm.classList.add('hidden');
+                formHeading.innerText = 'Student SignUp Form';
+            } else if (role === 'tutor') {
+                studentForm.classList.add('hidden');
+                tutorForm.classList.remove('hidden');
+                formHeading.innerText = 'Tutor SignUp Form';
+            }
+        }
+
+        function validateSignUp(role) {
+            var form;
+            if (role === 'student') {
+                form = document.getElementById('studentForm');
+            } else if (role === 'tutor') {
+                form = document.getElementById('tutorForm');
+            }
+
+            var name = form.querySelector('#name').value;
+            var email = form.querySelector('#email').value;
+            var mobile = form.querySelector('#mobile').value;
+
+            // Additional validation based on the role
+            if (role === 'student') {
+                var classInput = form.querySelector('#class').value;
+                var password = form.querySelector('#password').value;
+
+                // Perform validation for student form
+                if (name && email && classInput && mobile && password) {
+                    alert('Sign-up successful! (Student)');
+                } else {
+                    alert('Please fill in all the required fields.');
+                }
+            } else if (role === 'tutor') {
+                var qualification = form.querySelector('#qualification').value;
+                var courses = form.querySelector('#courses').value;
+
+                // Perform validation for tutor form
+                if (name && email && qualification && mobile && courses) {
+                    alert('Sign-up successful! (Tutor)');
+                } else {
+                    alert('Please fill in all the required fields.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

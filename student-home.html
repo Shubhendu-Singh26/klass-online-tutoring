@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KLASS - Student</title>
+    <link rel="icon" href="icon.jpg">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./globalsh.css" />
+    <link rel="stylesheet" href="./student-home.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <style>
+      /* Import Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background: #E3F2FD;
+}
+.chatbot-toggler {
+  position: fixed;
+  bottom: 30px;
+  right: 35px;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #724ae8;
+  transition: all 0.2s ease;
+}
+body.show-chatbot .chatbot-toggler {
+  transform: rotate(90deg);
+}
+.chatbot-toggler span {
+  color: #fff;
+  position: absolute;
+}
+.chatbot-toggler span:last-child,
+body.show-chatbot .chatbot-toggler span:first-child  {
+  opacity: 0;
+}
+body.show-chatbot .chatbot-toggler span:last-child {
+  opacity: 1;
+}
+.chatbot {
+  position: fixed;
+  right: 35px;
+  bottom: 90px;
+  width: 420px;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+  transform-origin: bottom right;
+  box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
+              0 32px 64px -48px rgba(0,0,0,0.5);
+  transition: all 0.1s ease;
+}
+body.show-chatbot .chatbot {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+.chatbot header {
+  padding: 16px 0;
+  position: relative;
+  text-align: center;
+  color: #fff;
+  background: #724ae8;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.chatbot header span {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  display: none;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+header h2 {
+  font-size: 1.4rem;
+}
+.chatbot .chatbox {
+  overflow-y: auto;
+  height: 510px;
+  padding: 30px 20px 100px;
+}
+.chatbot :where(.chatbox, textarea)::-webkit-scrollbar {
+  width: 6px;
+}
+.chatbot :where(.chatbox, textarea)::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: 25px;
+}
+.chatbot :where(.chatbox, textarea)::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 25px;
+}
+.chatbox .chat {
+  display: flex;
+  list-style: none;
+}
+.chatbox .outgoing {
+  margin: 20px 0;
+  justify-content: flex-end;
+}
+.chatbox .incoming span {
+  width: 32px;
+  height: 32px;
+  color: #fff;
+  cursor: default;
+  text-align: center;
+  line-height: 32px;
+  align-self: flex-end;
+  background: #724ae8;
+  border-radius: 4px;
+  margin: 0 10px 7px 0;
+}
+.chatbox .chat p {
+  white-space: pre-wrap;
+  padding: 12px 16px;
+  border-radius: 10px 10px 0 10px;
+  max-width: 75%;
+  color: #fff;
+  font-size: 0.95rem;
+  background: #724ae8;
+}
+.chatbox .incoming p {
+  border-radius: 10px 10px 10px 0;
+}
+.chatbox .chat p.error {
+  color: #721c24;
+  background: #f8d7da;
+}
+.chatbox .incoming p {
+  color: #000;
+  background: #f2f2f2;
+}
+.chatbot .chat-input {
+  display: flex;
+  gap: 5px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 3px 20px;
+  border-top: 1px solid #ddd;
+}
+.chat-input textarea {
+  height: 55px;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  max-height: 180px;
+  padding: 15px 15px 15px 0;
+  font-size: 0.95rem;
+}
+.chat-input span {
+  align-self: flex-end;
+  color: #724ae8;
+  cursor: pointer;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+  font-size: 1.35rem;
+}
+.chat-input textarea:valid ~ span {
+  visibility: visible;
+}
+
+@media (max-width: 490px) {
+  .chatbot-toggler {
+    right: 20px;
+    bottom: 20px;
+  }
+  .chatbot {
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    border-radius: 0;
+    width: 100%;
+  }
+  .chatbot .chatbox {
+    height: 90%;
+    padding: 25px 15px 100px;
+  }
+  .chatbot .chat-input {
+    padding: 5px 15px;
+  }
+  .chatbot header span {
+    display: block;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <div class="student-home">
+      <div class="makers-navigation-bar">
+        <div class="container">
+          <div class="left">
+            <div class="makers-brand-logo">
+              <div class="makingit-logo">
+                <div class="icon">
+                  <!-- <div class="icon-child"></div>
+                  <div class="icon-item"></div>
+                  <div class="icon-inner"></div> -->
+                </div>
+                <img src="LOGO.jpg" alt="">
+                <div class="logo"></div>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="links">
+              <div
+                class="makers-navigation-item"
+                id="mAKERSNAVIGATIONITEMContainer"
+              >
+                <div class="nav-item"><a href="student-classes.html" class="navb">Classes</a></div>
+              </div>
+              <div
+                class="makers-navigation-item"
+                id="mAKERSNAVIGATIONITEMContainer1"
+              >
+                <div class="nav-item"><a href="student-time-table.html" class="navb">Time Table</a></div>
+              </div>
+              <div
+                class="makers-navigation-item"
+                id="mAKERSNAVIGATIONITEMContainer2"
+              >
+                <div class="nav-item"><a href="student-study-material.html" class="navb">Study Material</a></div>
+              </div>
+              <div
+                class="makers-navigation-item"
+                id="mAKERSNAVIGATIONITEMContainer3"
+              >
+                <div class="nav-item"><a href="student-attendance.html" class="navb">Attendance</a></div>
+              </div>
+              <div class="nav-item"><a href="signuppage.html" class="navb1">Log Out</a></div>
+            </div>
+            <div
+              class="makers-navigation-item"
+              id="mAKERSNAVIGATIONITEMContainer2"
+            >
+            </div>
+            <div class="makers-button">
+              <div class="button">Button</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="makers-features">
+        <div class="container1">
+          <div class="text-container">
+            <div class="makers-text-content">
+              <div class="education"></div>
+              <b class="learn-how-to">Browse through various courses</b>
+              <div class="makers-is-a">
+                Courses available for High School students only!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <div class="features-grid">
+            <div class="media-objects">
+              <div class="makers-media-object">
+                <div class="media">
+                  <img
+                    class="makers-social-media-icons"
+                    alt=""
+                    src="./public/makers-social-media-icons@2x.png"
+                  />
+                </div>
+                <div class="text">
+                  <div class="publish-with-figma">Physics</div>
+                  <div class="lorem-ipsum-dolor">For Class 11 and 12</div>
+                  <div class="call-to-action"><a href="student-classes.html"></a></div>
+                </div>
+              </div>
+              <div class="makers-media-object">
+                <div class="media">
+                  
+                </div>
+                <div class="text">
+                  <div class="publish-with-figma">Mathematics</div>
+                  <div class="lorem-ipsum-dolor">
+                    For Class 9, 10, 11 and 12
+                  </div>
+                  <div class="call-to-action">Click to view</div>
+                </div>
+              </div>
+            </div>
+            <div class="media-objects">
+              <div class="makers-media-object">
+                <div class="media">
+                  <img
+                    class="makers-social-media-icons"
+                    alt=""
+                    src="./public/makers-social-media-icons@2x.png"
+                  />
+                </div>
+                <div class="text">
+                  <div class="publish-with-figma">Chemistry</div>
+                  <div class="lorem-ipsum-dolor">For Class 11 and 12</div>
+                  <div class="call-to-action">Click to view</div>
+                </div>
+              </div>
+              <div class="makers-media-object">
+                <div class="media">
+                  <img
+                    class="makers-social-media-icons"
+                    alt=""
+                    src="./public/makers-social-media-icons@2x.png"
+                  />
+                </div>
+                <div class="text">
+                  <div class="publish-with-figma">Biology</div>
+                  <div class="lorem-ipsum-dolor">For Class 11 and 12</div>
+                  <div class="call-to-action">Click to view</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="makers-featuresoverlapping-ba">
+        <div class="intro">
+          <div class="container2">
+            <div class="text-container">
+              <div class="makers-text-content1">
+                <div class="education1"></div>
+                <b class="learn-how-to">Learn from our top tutors.</b>
+                <div class="makers-is-a">Experience well over 10+ years</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content1">
+          <div class="container3">
+            <div class="features-grid1">
+              <div class="media-objects2">
+                <div class="media-container">
+                  <div class="makers-media-object4">
+                    <div class="media4">
+                      <img
+                        class="makers-social-media-icons1"
+                        alt=""
+                        src="./public/makers-social-media-icons@2x.png"
+                      />
+                    </div>
+                    <div class="text4">
+                      <div class="publish-with-figma">R D Sharma</div>
+                      <div class="lorem-ipsum-dolor">Mathematics Professor</div>
+                      <div class="call-to-action">Click to join</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="media-objects">
+                <div class="media-container">
+                  <div class="makers-media-object4">
+                    <div class="media4">
+                      <img
+                        class="makers-social-media-icons1"
+                        alt=""
+                        src="./public/makers-social-media-icons@2x.png"
+                      />
+                    </div>
+                    <div class="text4">
+                      <div class="publish-with-figma">Alakh Pandey</div>
+                      <div class="lorem-ipsum-dolor">Physics Professor</div>
+                      <div class="call-to-action">Click to join</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="media-container">
+                  <div class="makers-media-object4">
+                    <div class="media4">
+                      <img
+                        class="makers-social-media-icons1"
+                        alt=""
+                        src="./public/makers-social-media-icons@2x.png"
+                      />
+                    </div>
+                    <div class="text4">
+                      <div class="publish-with-figma">Seep Pahuja</div>
+                      <div class="lorem-ipsum-dolor">Biology Professor</div>
+                      <div class="call-to-action">Click to join</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="media-objects2">
+                <div class="media-container">
+                  <div class="makers-media-object4">
+                    <div class="media4">
+                      <img
+                        class="makers-social-media-icons1"
+                        alt=""
+                        src="./public/makers-social-media-icons@2x.png"
+                      />
+                    </div>
+                    <div class="text4">
+                      <div class="publish-with-figma">Ajit Kumar Sahu</div>
+                      <div class="lorem-ipsum-dolor">Chemistry Professor</div>
+                      <div class="call-to-action">Click to join</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="makers-faqthree-columns-with">
+        <div class="container1">
+          <div class="text-container">
+            <div class="makers-text-content">
+              <div class="education2">NO EVENTS AT THE MOMENT</div>
+              <b class="learn-how-to2"
+                >Learn how to make and publish sites with Figma</b
+              >
+              <div class="makers-is-a">
+                We’ll notify you if there is any event.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content2">
+          <div class="features-grid2">
+            <div class="column">
+              <div class="text4">
+                <div class="publish-with-figma">
+                  How do you go from Figma to Site?
+                </div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur. Lorem ipsum dolor sit amet, aeque tation
+                  vis ei. Ne his simul sensibus percipitur.
+                </div>
+              </div>
+              <div class="text4">
+                <div class="publish-with-figma">Why is Portugal so sunny?</div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur.
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="text4">
+                <div class="publish-with-figma">Where’s all the love?</div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur.
+                </div>
+              </div>
+              <div class="text4">
+                <div class="publish-with-figma">
+                  How do you know Santa is coming?
+                </div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur. Lorem ipsum dolor sit amet, aeque tation
+                  vis ei. Ne his simul sensibus percipitur.
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="text4">
+                <div class="publish-with-figma">Where’s all the love?</div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur. Lorem ipsum dolor sit amet, aeque tation
+                  vis ei. Ne his simul sensibus percipitur.
+                </div>
+              </div>
+              <div class="text4">
+                <div class="publish-with-figma">
+                  How do you know Santa is coming?
+                </div>
+                <div class="lorem-ipsum-dolor">
+                  Lorem ipsum dolor sit amet, aeque tation vis ei. Ne his simul
+                  sensibus percipitur.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="makers-footerfour-columns">
+        <div class="container5">
+          <div class="column3">
+            <div class="makers-brand-logo1">
+              <div class="makingit-logo1">
+                <div class="icon1">
+                  <!-- <div class="icon-child"></div>
+                  <div class="icon-item"></div>
+                  <div class="icon-inner"></div> -->
+                </div>
+              </div>
+            </div>
+            <div class="making-the-world">Making the world a better place.</div>
+            <div class="social-media">
+              <img
+                class="makers-social-media-icons1"
+                alt=""
+                src="./public/makers-social-media-icons2@2x.png"
+              />
+
+              <img
+                class="makers-social-media-icons1"
+                alt=""
+                src="./public/makers-social-media-icons3@2x.png"
+              />
+
+              <img
+                class="makers-social-media-icons1"
+                alt=""
+                src="./public/makers-social-media-icons4@2x.png"
+              />
+            </div>
+          </div>
+          <button class="chatbot-toggler">
+            <span class="material-symbols-rounded">mode_comment</span>
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          <div class="chatbot">
+            <header>
+              <h2>Chatbot</h2>
+              <span class="close-btn material-symbols-outlined">close</span>
+            </header>
+            <ul class="chatbox">
+              <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <p>Hi there 👋<br>How can I help you today?</p>
+              </li>
+            </ul>
+            <div class="chat-input">
+              <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+              <span id="send-btn" class="material-symbols-rounded">send</span>
+            </div>
+          </div>
+          <div class="column4">
+            <div class="company">COMPANY</div>
+            <div class="navigation-links">
+              <div class="navigation-item">
+                <div class="about">About</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Twitter</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Blog</div>
+              </div>
+            </div>
+          </div>
+          <div class="column4">
+            <div class="company">PRODUCT</div>
+            <div class="navigation-links">
+              <div class="navigation-item">
+                <div class="about">Pricing</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Features</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Templates</div>
+              </div>
+            </div>
+          </div>
+          <div class="column4">
+            <div class="company">RESOURCES</div>
+            <div class="navigation-links">
+              <div class="navigation-item">
+                <div class="about">Testimonials</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Support</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Terms</div>
+              </div>
+              <div class="navigation-item">
+                <div class="about">Privacy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="makers-footerlegal">
+        <div class="container6">
+          <div class="copyright">
+            <div class="about">
+              © 2022 Your Company, Inc. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const chatbotToggler = document.querySelector(".chatbot-toggler");
+const closeBtn = document.querySelector(".close-btn");
+const chatbox = document.querySelector(".chatbox");
+const chatInput = document.querySelector(".chat-input textarea");
+const sendChatBtn = document.querySelector(".chat-input span");
+
+let userMessage = null; // Variable to store user's message
+const API_KEY = "PASTE-YOUR-API-KEY"; // Paste your API key here
+const inputInitHeight = chatInput.scrollHeight;
+
+const createChatLi = (message, className) => {
+    // Create a chat <li> element with passed message and className
+    const chatLi = document.createElement("li");
+    chatLi.classList.add("chat", `${className}`);
+    let chatContent = className === "outgoing" ? `<p></p>` : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
+    chatLi.innerHTML = chatContent;
+    chatLi.querySelector("p").textContent = message;
+    return chatLi; // return chat <li> element
+}
+
+const generateResponse = (chatElement) => {
+    const API_URL = "https://api.openai.com/v1/chat/completions";
+    const messageElement = chatElement.querySelector("p");
+
+    // Define the properties and message for the API request
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${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}`
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{role: "user", content: userMessage}],
+        })
+    }
+
+    // Send POST request to API, get response and set the reponse as paragraph text
+    fetch(API_URL, requestOptions).then(res => res.json()).then(data => {
+        messageElement.textContent = data.choices[0].message.content.trim();
+    }).catch(() => {
+        messageElement.classList.add("error");
+        messageElement.textContent = "Oops! Something went wrong. Please try again.";
+    }).finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
+}
+
+const handleChat = () => {
+    userMessage = chatInput.value.trim(); // Get user entered message and remove extra whitespace
+    if(!userMessage) return;
+
+    // Clear the input textarea and set its height to default
+    chatInput.value = "";
+    chatInput.style.height = `${inputInitHeight}px`;
+
+    // Append the user's message to the chatbox
+    chatbox.appendChild(createChatLi(userMessage, "outgoing"));
+    chatbox.scrollTo(0, chatbox.scrollHeight);
+    
+    setTimeout(() => {
+        // Display "Thinking..." message while waiting for the response
+        const incomingChatLi = createChatLi("Thinking...", "incoming");
+        chatbox.appendChild(incomingChatLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+        generateResponse(incomingChatLi);
+    }, 600);
+}
+
+chatInput.addEventListener("input", () => {
+    // Adjust the height of the input textarea based on its content
+    chatInput.style.height = `${inputInitHeight}px`;
+    chatInput.style.height = `${chatInput.scrollHeight}px`;
+});
+
+chatInput.addEventListener("keydown", (e) => {
+    // If Enter key is pressed without Shift key and the window 
+    // width is greater than 800px, handle the chat
+    if(e.key === "Enter" && !e.shiftKey && window.innerWidth > 800) {
+        e.preventDefault();
+        handleChat();
+    }
+});
+
+sendChatBtn.addEventListener("click", handleChat);
+closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+      var mAKERSNAVIGATIONITEMContainer = document.getElementById(
+        "mAKERSNAVIGATIONITEMContainer"
+      );
+      if (mAKERSNAVIGATIONITEMContainer) {
+        mAKERSNAVIGATIONITEMContainer.addEventListener("click", function (e) {
+          // Please sync "Student Classes" to the project
+        });
+      }
+      
+      var mAKERSNAVIGATIONITEMContainer1 = document.getElementById(
+        "mAKERSNAVIGATIONITEMContainer1"
+      );
+      if (mAKERSNAVIGATIONITEMContainer1) {
+        mAKERSNAVIGATIONITEMContainer1.addEventListener("click", function (e) {
+          // Please sync "Student Time Table" to the project
+        });
+      }
+      
+      var mAKERSNAVIGATIONITEMContainer2 = document.getElementById(
+        "mAKERSNAVIGATIONITEMContainer2"
+      );
+      if (mAKERSNAVIGATIONITEMContainer2) {
+        mAKERSNAVIGATIONITEMContainer2.addEventListener("click", function (e) {
+          // Please sync "Student Study Material" to the project
+        });
+      }
+      
+      var mAKERSNAVIGATIONITEMContainer3 = document.getElementById(
+        "mAKERSNAVIGATIONITEMContainer3"
+      );
+      if (mAKERSNAVIGATIONITEMContainer3) {
+        mAKERSNAVIGATIONITEMContainer3.addEventListener("click", function (e) {
+          // Please sync "Student Attendance" to the project
+        });
+      }
+      </script>
+  </body>
+</html>
